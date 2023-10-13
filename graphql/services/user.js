@@ -1,3 +1,7 @@
+const User = require("../../models/user");
+const bcrypt = require("bcrypt");
+const { generateToken } = require("../../helpers/jwt");
+
 const typeDefs = `#graphql
     type User {
         username: String!,
@@ -21,7 +25,7 @@ const typeDefs = `#graphql
     }
 
     type Mutation {
-        signup(user: SignupInput!): User!,
+        signup(user: SignupInput!): String!,
     }
 `;
 
@@ -31,7 +35,23 @@ const resolvers = {
   },
   Mutation: {
     signup: async (_, { user }) => {
-      return { ...user, verified: false };
+      const { username, email, password } = user;
+
+      const existingUser = await User.findOne({ email: email.toLowerCase() });
+      if (existingUser) throw new Error("This email already exists");
+
+      const emailExp = RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+      if (!emailExp.test(email)) throw new Error("Not a valid email");
+
+      const hashPass = await bcrypt.hash(password, 10);
+      const newUser = await User.create({
+        username,
+        email: email.toLowerCase(),
+        password: hashPass,
+      });
+
+      const token = generateToken(newUser._id);
+      return token;
     },
   },
 };

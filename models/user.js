@@ -10,6 +10,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
     unique: true,
+    match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Email is not valid"],
   },
 
   password: {
@@ -20,6 +21,7 @@ const userSchema = new Schema({
   verified: {
     type: Boolean,
     default: false,
+    enum: [true, false],
   },
 });
 
