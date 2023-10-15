@@ -1,8 +1,8 @@
 const { default: mongoose } = require("mongoose");
 
-const URI = "mongodb://localhost:27017/auth";
-
 const connectMongo = async () => {
+  const URI = process.env.MONGO_URI || "mongodb://localhost:27017/auth";
+
   try {
     await mongoose.connect(URI);
     console.log("MongoDB connected");

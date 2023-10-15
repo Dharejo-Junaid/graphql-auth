@@ -2,8 +2,8 @@ const express = require("express");
 const { expressMiddleware } = require("@apollo/server/express4");
 const startGQLServer = require("./graphql/startGQLServer");
 const cors = require("cors");
-const { connectMongo } = require("./database/mongo");
-require("dotenv").configDotenv();
+const { connectMongo } = require("./utils/mongo");
+require("dotenv").config();
 
 const PORT = process.env.PORT || 5000;
 
