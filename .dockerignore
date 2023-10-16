@@ -1,0 +1,8 @@
+node_modules
+gql.png
+readme.md
+.git
+.gitignore
+Dockerfile
+.dockerignore
+docker-compose.yaml
