@@ -13,7 +13,15 @@ const init = async () => {
 
   try {
     const gqlServer = await startGQLServer();
-    app.use("/graphql", expressMiddleware(gqlServer));
+    app.use(
+      "/graphql",
+      expressMiddleware(gqlServer, {
+        context: ({ req }) => {
+          console.log(req.headers);
+          return { authorization: req.headers.authorization };
+        },
+      })
+    );
 
     await connectMongo();
 

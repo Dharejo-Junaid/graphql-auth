@@ -16,7 +16,11 @@ const startGQLServer = async () => {
     },
   };
 
-  const server = new ApolloServer({ typeDefs, resolvers });
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+  });
+
   await server.start();
   return server;
 };

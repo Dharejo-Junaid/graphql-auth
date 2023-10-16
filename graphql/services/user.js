@@ -5,6 +5,13 @@ const { sendVerificationEmail } = require("../../utils/emails");
 
 const typeDefs = `#graphql
 
+  type User {
+    _id: ID!,
+    username: String!, 
+    email: String!,
+    verified: Boolean!
+  }
+
   input SignupInput {
     username: String!,
     email: String!,
@@ -18,6 +25,8 @@ const typeDefs = `#graphql
 
   type Query {
     login(user: LoginInput): String!
+    users: [User]!,
+    user(_id: ID!): User
   }
 
   type Mutation {
@@ -45,6 +54,16 @@ const resolvers = {
       }
 
       return token;
+    },
+
+    users: async (_, __, { authorization }) => {
+      verifyToken(authorization);
+      return await User.find();
+    },
+
+    user: async (_, { _id }, { authorization }) => {
+      verifyToken(authorization);
+      return await User.findById(_id);
     },
   },
   Mutation: {
